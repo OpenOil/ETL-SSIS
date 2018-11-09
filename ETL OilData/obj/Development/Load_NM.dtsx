@@ -1,0 +1,1885 @@
+<?xml version="1.0"?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:refId="Package"
+  DTS:CreationDate="5/15/2018 5:24:49 PM"
+  DTS:CreationName="Microsoft.Package"
+  DTS:CreatorComputerName="DESKTOP-CUCO6BD"
+  DTS:CreatorName="DESKTOP-CUCO6BD\GreenTrust"
+  DTS:DTSID="{29306D72-CE43-4888-B7C0-CBC6A223420F}"
+  DTS:ExecutableType="Microsoft.Package"
+  DTS:LastModifiedProductVersion="14.0.3026.27"
+  DTS:LocaleID="1033"
+  DTS:ObjectName="Load_NM"
+  DTS:PackageType="5"
+  DTS:VersionBuild="49"
+  DTS:VersionGUID="{89FF3130-25AA-4B9B-A207-BD92C7D02114}">
+  <DTS:Property
+    DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:ConnectionManagers>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[Destination_SQL DB]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{7DF2130B-E399-42A4-B2BB-4BC46DCC0D48}"
+      DTS:ObjectName="Destination_SQL DB">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectionString="Data Source=SQL\GREENTRUST;Initial Catalog=OilData;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=false;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[Source_Access DB]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{33622F81-37C4-44D0-836C-3879457BD81F}"
+      DTS:ObjectName="Source_Access DB">
+      <DTS:PropertyExpression
+        DTS:Name="ServerName">@[User::FilePath]</DTS:PropertyExpression>
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectionString="Data Source=D:\Oil Data\NM\AllWells.mdb;Provider=Microsoft.ACE.OLEDB.12.0;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[T-SQL Connection]"
+      DTS:CreationName="ADO.NET:SQL"
+      DTS:DTSID="{5442DA0E-499B-44A1-A2D1-E0A48FE02D8F}"
+      DTS:ObjectName="T-SQL Connection">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectionString="Data Source=SQL\GREENTRUST;Initial Catalog=OilData;Integrated Security=True;Connect Timeout=30;Application Name=SSIS-Load_NM-{5442DA0E-499B-44A1-A2D1-E0A48FE02D8F}T-SQL Connection;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+  </DTS:ConnectionManagers>
+  <DTS:Variables>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{8A87D432-976A-4F61-A413-6F0C17DBADEA}"
+      DTS:EvaluateAsExpression="True"
+      DTS:Expression="RIGHT( @[User::FilePath] , 12 )"
+      DTS:IncludeInDebugDump="2345"
+      DTS:Namespace="User"
+      DTS:ObjectName="FileName">
+      <DTS:VariableValue
+        DTS:DataType="8">AllWells.mdb</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{F20AB418-B97D-4D55-A22C-B91786D7A43F}"
+      DTS:IncludeInDebugDump="2345"
+      DTS:Namespace="User"
+      DTS:ObjectName="FilePath">
+      <DTS:VariableValue
+        DTS:DataType="8">D:\Oil Data\NM\AllWells.mdb</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{6F6560E1-7C48-44DB-A699-B4A1908F1803}"
+      DTS:EvaluateAsExpression="True"
+      DTS:Expression="&quot;AllWells&quot;"
+      DTS:IncludeInDebugDump="2345"
+      DTS:Namespace="User"
+      DTS:ObjectName="ProductionTable">
+      <DTS:VariableValue
+        DTS:DataType="8">AllWells</DTS:VariableValue>
+    </DTS:Variable>
+  </DTS:Variables>
+  <DTS:Executables>
+    <DTS:Executable
+      DTS:refId="Package\Delete all Data"
+      DTS:CreationName="Microsoft.DbMaintenanceTSQLExecuteTask"
+      DTS:Description="Execute T-SQL Statement Task"
+      DTS:DTSID="{81C037B0-6342-4ABA-8E8B-C7BBC3ED4DB6}"
+      DTS:ExecutableType="Microsoft.DbMaintenanceTSQLExecuteTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Delete all Data"
+      DTS:TaskContact="Execute T-SQL Statement Task; Microsoft Corporation; Microsoft SQL Server v9; © 2004 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{5442DA0E-499B-44A1-A2D1-E0A48FE02D8F}"
+          SQLTask:SqlStatementSource="USE OilData;&#xA;&#xA;TRUNCATE TABLE [dbo].[NM_Production];"
+          SQLTask:ServerVersion="9"
+          SQLTask:ExtendedLogging="True"
+          SQLTask:LocalConnectionForLogging=""
+          SQLTask:TaskName=""
+          SQLTask:IgnoreDatabasesInNotOnlineState="False" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Upload 1 Table"
+      DTS:CreationName="Microsoft.Pipeline"
+      DTS:Description="Data Flow Task"
+      DTS:DTSID="{FC07CAB5-2EE6-4385-ABE8-761EB9C1F657}"
+      DTS:ExecutableType="Microsoft.Pipeline"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Upload 1 Table"
+      DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <pipeline
+          version="1">
+          <components>
+            <component
+              refId="Package\Upload 1 Table\Data Conversion"
+              componentClassID="Microsoft.DataConvert"
+              contactInfo="Data Conversion;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;0"
+              description="Data Conversion"
+              name="Data Conversion"
+              usesDispositions="true">
+              <inputs>
+                <input
+                  refId="Package\Upload 1 Table\Data Conversion.Inputs[Data Conversion Input]"
+                  name="Data Conversion Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Upload 1 Table\Data Conversion.Inputs[Data Conversion Input].Columns[PLUG_DATE]"
+                      cachedDataType="date"
+                      cachedName="PLUG_DATE"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[PLUG_DATE]" />
+                    <inputColumn
+                      refId="Package\Upload 1 Table\Data Conversion.Inputs[Data Conversion Input].Columns[SPUD_DATE]"
+                      cachedDataType="date"
+                      cachedName="SPUD_DATE"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[SPUD_DATE]" />
+                  </inputColumns>
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Upload 1 Table\Data Conversion.Outputs[Data Conversion Output]"
+                  exclusionGroup="1"
+                  name="Data Conversion Output"
+                  synchronousInputId="Package\Upload 1 Table\Data Conversion.Inputs[Data Conversion Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Data Conversion.Outputs[Data Conversion Output].Columns[PLUG_DATE]"
+                      dataType="dbTimeStamp"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      lineageId="Package\Upload 1 Table\Data Conversion.Outputs[Data Conversion Output].Columns[PLUG_DATE]"
+                      name="PLUG_DATE"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Specifies the input column used as the source of data for the conversion."
+                          name="SourceInputColumnLineageID">#{Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[PLUG_DATE]}</property>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                          name="FastParse">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Data Conversion.Outputs[Data Conversion Output].Columns[SPUD_DATE]"
+                      dataType="dbTimeStamp"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      lineageId="Package\Upload 1 Table\Data Conversion.Outputs[Data Conversion Output].Columns[SPUD_DATE]"
+                      name="SPUD_DATE"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Specifies the input column used as the source of data for the conversion."
+                          name="SourceInputColumnLineageID">#{Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[SPUD_DATE]}</property>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                          name="FastParse">false</property>
+                      </properties>
+                    </outputColumn>
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\Upload 1 Table\Data Conversion.Outputs[Data Conversion Error Output]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="Data Conversion Error Output"
+                  synchronousInputId="Package\Upload 1 Table\Data Conversion.Inputs[Data Conversion Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Data Conversion.Outputs[Data Conversion Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Upload 1 Table\Data Conversion.Outputs[Data Conversion Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Data Conversion.Outputs[Data Conversion Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Upload 1 Table\Data Conversion.Outputs[Data Conversion Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Upload 1 Table\Destination - Production"
+              componentClassID="Microsoft.SQLServerDestination"
+              contactInfo="SQL Server Destination;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;5"
+              description="SQL Server Destination"
+              name="Destination - Production"
+              version="5">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forces the use of the DefaultCodePage property value when describing character data."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.String"
+                  description="The name of the database object to copy data into."
+                  expressionType="Notify"
+                  name="BulkInsertTableName">[dbo].[NM_Production]</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Specifies that any constraints on the destination object are checked during the data copy operation. Corresponds to the bulk insert CHECK_CONSTRAINTS option."
+                  name="BulkInsertCheckConstraints">true</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the number of the first row to copy. Corresponds to the bulk insert FIRSTROW option."
+                  expressionType="Notify"
+                  name="BulkInsertFirstRow">-1</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Specifies that any insert triggers defined on the destination object will execute during the data copy. Corresponds to the bulk insert FIRE_TRIGGERS option."
+                  name="BulkInsertFireTriggers">false</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the values supplied for identity columns will be copied to the destination. If false, values for identity columns will be auto-generated at the destination. Corresponds to the bulk insert KEEPIDENTITY option."
+                  name="BulkInsertKeepIdentity">false</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the columns containing null will have null copied to the destination. If false, columns containing null will have their default values inserted at the destination. Applies only if fast load is turned on."
+                  name="BulkInsertKeepNulls">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the number of the last row to copy. Corresponds to the bulk insert LASTROW option."
+                  expressionType="Notify"
+                  name="BulkInsertLastRow">-1</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the maximum number of syntax errors and compilation errors that can occur before the data copy operation is canceled. Each row that cannot be copied is ignored and counted as one error. Corresponds to the bulk insert MAXERRORS option."
+                  name="BulkInsertMaxErrors">-1</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies how the data to be copied is sorted. Corresponds to the bulk insert ORDER option."
+                  expressionType="Notify"
+                  name="BulkInsertOrder"></property>
+                <property
+                  dataType="System.Boolean"
+                  description="Specifies that a table-level lock is acquired for the duration of the data copy operation. Corresponds to the bulk insert TABLOCK option."
+                  name="BulkInsertTablock">true</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies in seconds the amount of time the SQL Destination adapter will wait before terminating if there is no data available for insertion.  A timeout value of 0 means the SQL Destination adapter will not time out."
+                  expressionType="Notify"
+                  name="Timeout">30</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies when commits are issued during data insertion.  A value of 0 specifies that one commit will be issued at the end of data insertion."
+                  name="MaxInsertCommitSize">0</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Upload 1 Table\Destination - Production.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[Destination_SQL DB]"
+                  connectionManagerRefId="Package.ConnectionManagers[Destination_SQL DB]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input]"
+                  hasSideEffects="true"
+                  name="SQL Server Destination Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].Columns[ACRES]"
+                      cachedDataType="r8"
+                      cachedName="ACRES"
+                      externalMetadataColumnId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[ACRES]"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[ACRES]" />
+                    <inputColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].Columns[API]"
+                      cachedDataType="wstr"
+                      cachedLength="10"
+                      cachedName="API"
+                      externalMetadataColumnId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[API]"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[API]" />
+                    <inputColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].Columns[OPERATOR]"
+                      cachedDataType="wstr"
+                      cachedLength="45"
+                      cachedName="OPERATOR"
+                      externalMetadataColumnId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[OPERATOR]"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[OPERATOR]" />
+                    <inputColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].Columns[PRODUCING_POOLID]"
+                      cachedDataType="i4"
+                      cachedName="PRODUCING_POOLID"
+                      externalMetadataColumnId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[PRODUCING_POOLID]"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[PRODUCING_POOLID]" />
+                    <inputColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].Columns[PROPERTY]"
+                      cachedDataType="i4"
+                      cachedName="PROPERTY"
+                      externalMetadataColumnId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[PROPERTY]"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[PROPERTY]" />
+                    <inputColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].Columns[RANGE]"
+                      cachedDataType="wstr"
+                      cachedLength="5"
+                      cachedName="RANGE"
+                      externalMetadataColumnId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[RANGE]"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[RANGE]" />
+                    <inputColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].Columns[SDIV_UL]"
+                      cachedDataType="wstr"
+                      cachedLength="3"
+                      cachedName="SDIV_UL"
+                      externalMetadataColumnId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[SDIV_UL]"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[SDIV_UL]" />
+                    <inputColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].Columns[SECTION]"
+                      cachedDataType="i2"
+                      cachedName="SECTION"
+                      externalMetadataColumnId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[SECTION]"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[SECTION]" />
+                    <inputColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].Columns[TOWNSHIP]"
+                      cachedDataType="wstr"
+                      cachedLength="5"
+                      cachedName="TOWNSHIP"
+                      externalMetadataColumnId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[TOWNSHIP]"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[TOWNSHIP]" />
+                    <inputColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].Columns[TVD_DEPTH]"
+                      cachedDataType="i4"
+                      cachedName="TVD_DEPTH"
+                      externalMetadataColumnId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[TVD_DEPTH]"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[TVD_DEPTH]" />
+                    <inputColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].Columns[water_inj_2016]"
+                      cachedDataType="i4"
+                      cachedName="water_inj_2016"
+                      externalMetadataColumnId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[water_inj_2016]"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[water_inj_2016]" />
+                    <inputColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].Columns[water_inj_2017]"
+                      cachedDataType="i4"
+                      cachedName="water_inj_2017"
+                      externalMetadataColumnId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[water_inj_2017]"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[water_inj_2017]" />
+                    <inputColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].Columns[water_inj_2018]"
+                      cachedDataType="i4"
+                      cachedName="water_inj_2018"
+                      externalMetadataColumnId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[water_inj_2018]"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[water_inj_2018]" />
+                    <inputColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].Columns[water_prod_2016]"
+                      cachedDataType="i4"
+                      cachedName="water_prod_2016"
+                      externalMetadataColumnId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[water_prod_2016]"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[water_prod_2016]" />
+                    <inputColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].Columns[water_prod_2017]"
+                      cachedDataType="i4"
+                      cachedName="water_prod_2017"
+                      externalMetadataColumnId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[water_prod_2017]"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[water_prod_2017]" />
+                    <inputColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].Columns[water_prod_2018]"
+                      cachedDataType="i4"
+                      cachedName="water_prod_2018"
+                      externalMetadataColumnId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[water_prod_2018]"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[water_prod_2018]" />
+                    <inputColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].Columns[WELL_NAME]"
+                      cachedDataType="wstr"
+                      cachedLength="46"
+                      cachedName="WELL_NAME"
+                      externalMetadataColumnId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[WELL_NAME]"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[WELL_NAME]" />
+                    <inputColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].Columns[WELL_TYPE]"
+                      cachedDataType="wstr"
+                      cachedLength="1"
+                      cachedName="WELL_TYPE"
+                      externalMetadataColumnId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[WELL_TYPE]"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[WELL_TYPE]" />
+                    <inputColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].Columns[COMPL_STATUS]"
+                      cachedDataType="wstr"
+                      cachedLength="100"
+                      cachedName="COMPL_STATUS"
+                      externalMetadataColumnId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[COMPL_STATUS]"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[COMPL_STATUS]" />
+                    <inputColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].Columns[COUNTY]"
+                      cachedDataType="wstr"
+                      cachedLength="15"
+                      cachedName="COUNTY"
+                      externalMetadataColumnId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[COUNTY]"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[COUNTY]" />
+                    <inputColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].Columns[days_prod_2016]"
+                      cachedDataType="i4"
+                      cachedName="days_prod_2016"
+                      externalMetadataColumnId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[days_prod_2016]"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[days_prod_2016]" />
+                    <inputColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].Columns[days_prod_2017]"
+                      cachedDataType="i4"
+                      cachedName="days_prod_2017"
+                      externalMetadataColumnId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[days_prod_2017]"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[days_prod_2017]" />
+                    <inputColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].Columns[days_prod_2018]"
+                      cachedDataType="i4"
+                      cachedName="days_prod_2018"
+                      externalMetadataColumnId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[days_prod_2018]"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[days_prod_2018]" />
+                    <inputColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].Columns[ELEVGL]"
+                      cachedDataType="i4"
+                      cachedName="ELEVGL"
+                      externalMetadataColumnId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[ELEVGL]"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[ELEVGL]" />
+                    <inputColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].Columns[EW_CD]"
+                      cachedDataType="wstr"
+                      cachedLength="1"
+                      cachedName="EW_CD"
+                      externalMetadataColumnId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[EW_CD]"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[EW_CD]" />
+                    <inputColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].Columns[FTG_EW]"
+                      cachedDataType="i4"
+                      cachedName="FTG_EW"
+                      externalMetadataColumnId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[FTG_EW]"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[FTG_EW]" />
+                    <inputColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].Columns[FTG_NS]"
+                      cachedDataType="i4"
+                      cachedName="FTG_NS"
+                      externalMetadataColumnId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[FTG_NS]"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[FTG_NS]" />
+                    <inputColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].Columns[gas_prod_2016]"
+                      cachedDataType="i4"
+                      cachedName="gas_prod_2016"
+                      externalMetadataColumnId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[gas_prod_2016]"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[gas_prod_2016]" />
+                    <inputColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].Columns[gas_prod_2017]"
+                      cachedDataType="i4"
+                      cachedName="gas_prod_2017"
+                      externalMetadataColumnId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[gas_prod_2017]"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[gas_prod_2017]" />
+                    <inputColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].Columns[gas_prod_2018]"
+                      cachedDataType="i4"
+                      cachedName="gas_prod_2018"
+                      externalMetadataColumnId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[gas_prod_2018]"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[gas_prod_2018]" />
+                    <inputColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].Columns[LAND_TYPE]"
+                      cachedDataType="wstr"
+                      cachedLength="2"
+                      cachedName="LAND_TYPE"
+                      externalMetadataColumnId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[LAND_TYPE]"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[LAND_TYPE]" />
+                    <inputColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].Columns[LAST_PROD_INJ]"
+                      cachedDataType="wstr"
+                      cachedLength="7"
+                      cachedName="LAST_PROD_INJ"
+                      externalMetadataColumnId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[LAST_PROD_INJ]"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[LAST_PROD_INJ]" />
+                    <inputColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].Columns[LATITUDE]"
+                      cachedDataType="r8"
+                      cachedName="LATITUDE"
+                      externalMetadataColumnId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[LATITUDE]"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[LATITUDE]" />
+                    <inputColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].Columns[LONGITUDE]"
+                      cachedDataType="r8"
+                      cachedName="LONGITUDE"
+                      externalMetadataColumnId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[LONGITUDE]"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[LONGITUDE]" />
+                    <inputColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].Columns[NBR_COMPLS]"
+                      cachedDataType="i4"
+                      cachedName="NBR_COMPLS"
+                      externalMetadataColumnId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[NBR_COMPLS]"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[NBR_COMPLS]" />
+                    <inputColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].Columns[NS_CD]"
+                      cachedDataType="wstr"
+                      cachedLength="1"
+                      cachedName="NS_CD"
+                      externalMetadataColumnId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[NS_CD]"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[NS_CD]" />
+                    <inputColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].Columns[OCD_UL]"
+                      cachedDataType="wstr"
+                      cachedLength="1"
+                      cachedName="OCD_UL"
+                      externalMetadataColumnId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[OCD_UL]"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[OCD_UL]" />
+                    <inputColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].Columns[OGRID_CDE]"
+                      cachedDataType="i4"
+                      cachedName="OGRID_CDE"
+                      externalMetadataColumnId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[OGRID_CDE]"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[OGRID_CDE]" />
+                    <inputColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].Columns[oil_prod_2016]"
+                      cachedDataType="i4"
+                      cachedName="oil_prod_2016"
+                      externalMetadataColumnId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[oil_prod_2016]"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[oil_prod_2016]" />
+                    <inputColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].Columns[oil_prod_2017]"
+                      cachedDataType="i4"
+                      cachedName="oil_prod_2017"
+                      externalMetadataColumnId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[oil_prod_2017]"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[oil_prod_2017]" />
+                    <inputColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].Columns[oil_prod_2018]"
+                      cachedDataType="i4"
+                      cachedName="oil_prod_2018"
+                      externalMetadataColumnId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[oil_prod_2018]"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[oil_prod_2018]" />
+                    <inputColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].Columns[ONE_PRODUCING_POOL_NAME]"
+                      cachedDataType="wstr"
+                      cachedLength="35"
+                      cachedName="ONE_PRODUCING_POOL_NAME"
+                      externalMetadataColumnId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[ONE_PRODUCING_POOL_NAME]"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[ONE_PRODUCING_POOL_NAME]" />
+                    <inputColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].Columns[PLUG_DATE]"
+                      cachedDataType="dbTimeStamp"
+                      cachedName="PLUG_DATE"
+                      externalMetadataColumnId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[PLUG_DATE]"
+                      lineageId="Package\Upload 1 Table\Data Conversion.Outputs[Data Conversion Output].Columns[PLUG_DATE]" />
+                    <inputColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].Columns[SPUD_DATE]"
+                      cachedDataType="dbTimeStamp"
+                      cachedName="SPUD_DATE"
+                      externalMetadataColumnId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[SPUD_DATE]"
+                      lineageId="Package\Upload 1 Table\Data Conversion.Outputs[Data Conversion Output].Columns[SPUD_DATE]" />
+                  </inputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[ACRES]"
+                      dataType="r8"
+                      name="ACRES" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[API]"
+                      dataType="wstr"
+                      length="10"
+                      name="API" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[OPERATOR]"
+                      dataType="wstr"
+                      length="45"
+                      name="OPERATOR" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[PLUG_DATE]"
+                      dataType="dbTimeStamp"
+                      name="PLUG_DATE" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[PRODUCING_POOLID]"
+                      dataType="i4"
+                      name="PRODUCING_POOLID" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[PROPERTY]"
+                      dataType="i4"
+                      name="PROPERTY" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[RANGE]"
+                      dataType="wstr"
+                      length="5"
+                      name="RANGE" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[SDIV_UL]"
+                      dataType="wstr"
+                      length="3"
+                      name="SDIV_UL" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[SECTION]"
+                      dataType="i2"
+                      name="SECTION" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[SPUD_DATE]"
+                      dataType="dbTimeStamp"
+                      name="SPUD_DATE" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[TOWNSHIP]"
+                      dataType="wstr"
+                      length="5"
+                      name="TOWNSHIP" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[TVD_DEPTH]"
+                      dataType="i4"
+                      name="TVD_DEPTH" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[water_inj_2016]"
+                      dataType="i4"
+                      name="water_inj_2016" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[water_inj_2017]"
+                      dataType="i4"
+                      name="water_inj_2017" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[water_inj_2018]"
+                      dataType="i4"
+                      name="water_inj_2018" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[water_prod_2016]"
+                      dataType="i4"
+                      name="water_prod_2016" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[water_prod_2017]"
+                      dataType="i4"
+                      name="water_prod_2017" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[water_prod_2018]"
+                      dataType="i4"
+                      name="water_prod_2018" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[WELL_NAME]"
+                      dataType="wstr"
+                      length="46"
+                      name="WELL_NAME" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[WELL_TYPE]"
+                      dataType="wstr"
+                      length="1"
+                      name="WELL_TYPE" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[COMPL_STATUS]"
+                      dataType="wstr"
+                      length="100"
+                      name="COMPL_STATUS" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[COUNTY]"
+                      dataType="wstr"
+                      length="15"
+                      name="COUNTY" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[days_prod_2016]"
+                      dataType="i4"
+                      name="days_prod_2016" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[days_prod_2017]"
+                      dataType="i4"
+                      name="days_prod_2017" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[days_prod_2018]"
+                      dataType="i4"
+                      name="days_prod_2018" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[ELEVGL]"
+                      dataType="i4"
+                      name="ELEVGL" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[EW_CD]"
+                      dataType="wstr"
+                      length="1"
+                      name="EW_CD" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[FTG_EW]"
+                      dataType="i4"
+                      name="FTG_EW" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[FTG_NS]"
+                      dataType="i4"
+                      name="FTG_NS" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[gas_prod_2016]"
+                      dataType="i4"
+                      name="gas_prod_2016" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[gas_prod_2017]"
+                      dataType="i4"
+                      name="gas_prod_2017" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[gas_prod_2018]"
+                      dataType="i4"
+                      name="gas_prod_2018" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[LAND_TYPE]"
+                      dataType="wstr"
+                      length="2"
+                      name="LAND_TYPE" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[LAST_PROD_INJ]"
+                      dataType="wstr"
+                      length="7"
+                      name="LAST_PROD_INJ" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[LATITUDE]"
+                      dataType="r8"
+                      name="LATITUDE" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[LONGITUDE]"
+                      dataType="r8"
+                      name="LONGITUDE" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[NBR_COMPLS]"
+                      dataType="i4"
+                      name="NBR_COMPLS" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[NS_CD]"
+                      dataType="wstr"
+                      length="1"
+                      name="NS_CD" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[OCD_UL]"
+                      dataType="wstr"
+                      length="1"
+                      name="OCD_UL" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[OGRID_CDE]"
+                      dataType="i4"
+                      name="OGRID_CDE" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[oil_prod_2016]"
+                      dataType="i4"
+                      name="oil_prod_2016" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[oil_prod_2017]"
+                      dataType="i4"
+                      name="oil_prod_2017" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[oil_prod_2018]"
+                      dataType="i4"
+                      name="oil_prod_2018" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input].ExternalColumns[ONE_PRODUCING_POOL_NAME]"
+                      dataType="wstr"
+                      length="35"
+                      name="ONE_PRODUCING_POOL_NAME" />
+                  </externalMetadataColumns>
+                </input>
+              </inputs>
+            </component>
+            <component
+              refId="Package\Upload 1 Table\Source - Production"
+              componentClassID="Microsoft.OLEDBSource"
+              contactInfo="OLE DB Source;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;7"
+              description="OLE DB Source"
+              name="Source - Production"
+              usesDispositions="true"
+              version="7">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset">2018CaliforniaOilandGasWellProduction</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable">User::ProductionTable</property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                <property
+                  dataType="System.String"
+                  description="The variable that contains the SQL command to be executed."
+                  name="SqlCommandVariable"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forces the use of the DefaultCodePage property value when describing character data."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">1</property>
+                <property
+                  dataType="System.String"
+                  description="The mappings between the parameters in the SQL command and variables."
+                  name="ParameterMapping"></property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Upload 1 Table\Source - Production.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[Source_Access DB]"
+                  connectionManagerRefId="Package.ConnectionManagers[Source_Access DB]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <outputs>
+                <output
+                  refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output]"
+                  name="OLE DB Source Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[ACRES]"
+                      dataType="r8"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[ACRES]"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[ACRES]"
+                      name="ACRES"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[API]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[API]"
+                      length="10"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[API]"
+                      name="API"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[OPERATOR]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[OPERATOR]"
+                      length="45"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[OPERATOR]"
+                      name="OPERATOR"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[PLUG_DATE]"
+                      dataType="date"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[PLUG_DATE]"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[PLUG_DATE]"
+                      name="PLUG_DATE"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[PRODUCING_POOLID]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[PRODUCING_POOLID]"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[PRODUCING_POOLID]"
+                      name="PRODUCING_POOLID"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[PROPERTY]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[PROPERTY]"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[PROPERTY]"
+                      name="PROPERTY"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[RANGE]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[RANGE]"
+                      length="5"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[RANGE]"
+                      name="RANGE"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[SDIV_UL]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[SDIV_UL]"
+                      length="3"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[SDIV_UL]"
+                      name="SDIV_UL"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[SECTION]"
+                      dataType="i2"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[SECTION]"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[SECTION]"
+                      name="SECTION"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[SPUD_DATE]"
+                      dataType="date"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[SPUD_DATE]"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[SPUD_DATE]"
+                      name="SPUD_DATE"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[TOWNSHIP]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[TOWNSHIP]"
+                      length="5"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[TOWNSHIP]"
+                      name="TOWNSHIP"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[TVD_DEPTH]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[TVD_DEPTH]"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[TVD_DEPTH]"
+                      name="TVD_DEPTH"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[water_inj_2016]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[water_inj_2016]"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[water_inj_2016]"
+                      name="water_inj_2016"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[water_inj_2017]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[water_inj_2017]"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[water_inj_2017]"
+                      name="water_inj_2017"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[water_inj_2018]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[water_inj_2018]"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[water_inj_2018]"
+                      name="water_inj_2018"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[water_prod_2016]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[water_prod_2016]"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[water_prod_2016]"
+                      name="water_prod_2016"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[water_prod_2017]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[water_prod_2017]"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[water_prod_2017]"
+                      name="water_prod_2017"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[water_prod_2018]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[water_prod_2018]"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[water_prod_2018]"
+                      name="water_prod_2018"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[WELL_NAME]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[WELL_NAME]"
+                      length="46"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[WELL_NAME]"
+                      name="WELL_NAME"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[WELL_TYPE]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[WELL_TYPE]"
+                      length="1"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[WELL_TYPE]"
+                      name="WELL_TYPE"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[COMPL_STATUS]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[COMPL_STATUS]"
+                      length="100"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[COMPL_STATUS]"
+                      name="COMPL_STATUS"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[COUNTY]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[COUNTY]"
+                      length="15"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[COUNTY]"
+                      name="COUNTY"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[days_prod_2016]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[days_prod_2016]"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[days_prod_2016]"
+                      name="days_prod_2016"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[days_prod_2017]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[days_prod_2017]"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[days_prod_2017]"
+                      name="days_prod_2017"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[days_prod_2018]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[days_prod_2018]"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[days_prod_2018]"
+                      name="days_prod_2018"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[ELEVGL]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[ELEVGL]"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[ELEVGL]"
+                      name="ELEVGL"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[EW_CD]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[EW_CD]"
+                      length="1"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[EW_CD]"
+                      name="EW_CD"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[FTG_EW]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[FTG_EW]"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[FTG_EW]"
+                      name="FTG_EW"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[FTG_NS]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[FTG_NS]"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[FTG_NS]"
+                      name="FTG_NS"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[gas_prod_2016]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[gas_prod_2016]"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[gas_prod_2016]"
+                      name="gas_prod_2016"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[gas_prod_2017]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[gas_prod_2017]"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[gas_prod_2017]"
+                      name="gas_prod_2017"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[gas_prod_2018]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[gas_prod_2018]"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[gas_prod_2018]"
+                      name="gas_prod_2018"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[LAND_TYPE]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[LAND_TYPE]"
+                      length="2"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[LAND_TYPE]"
+                      name="LAND_TYPE"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[LAST_PROD_INJ]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[LAST_PROD_INJ]"
+                      length="7"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[LAST_PROD_INJ]"
+                      name="LAST_PROD_INJ"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[LATITUDE]"
+                      dataType="r8"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[LATITUDE]"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[LATITUDE]"
+                      name="LATITUDE"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[LONGITUDE]"
+                      dataType="r8"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[LONGITUDE]"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[LONGITUDE]"
+                      name="LONGITUDE"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[NBR_COMPLS]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[NBR_COMPLS]"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[NBR_COMPLS]"
+                      name="NBR_COMPLS"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[NS_CD]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[NS_CD]"
+                      length="1"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[NS_CD]"
+                      name="NS_CD"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[OCD_UL]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[OCD_UL]"
+                      length="1"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[OCD_UL]"
+                      name="OCD_UL"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[OGRID_CDE]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[OGRID_CDE]"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[OGRID_CDE]"
+                      name="OGRID_CDE"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[oil_prod_2016]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[oil_prod_2016]"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[oil_prod_2016]"
+                      name="oil_prod_2016"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[oil_prod_2017]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[oil_prod_2017]"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[oil_prod_2017]"
+                      name="oil_prod_2017"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[oil_prod_2018]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[oil_prod_2018]"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[oil_prod_2018]"
+                      name="oil_prod_2018"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[ONE_PRODUCING_POOL_NAME]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[ONE_PRODUCING_POOL_NAME]"
+                      length="35"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].Columns[ONE_PRODUCING_POOL_NAME]"
+                      name="ONE_PRODUCING_POOL_NAME"
+                      truncationRowDisposition="FailComponent" />
+                  </outputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[ACRES]"
+                      dataType="r8"
+                      name="ACRES" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[API]"
+                      dataType="wstr"
+                      length="10"
+                      name="API" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[OPERATOR]"
+                      dataType="wstr"
+                      length="45"
+                      name="OPERATOR" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[PLUG_DATE]"
+                      dataType="date"
+                      name="PLUG_DATE" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[PRODUCING_POOLID]"
+                      dataType="i4"
+                      name="PRODUCING_POOLID" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[PROPERTY]"
+                      dataType="i4"
+                      name="PROPERTY" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[RANGE]"
+                      dataType="wstr"
+                      length="5"
+                      name="RANGE" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[SDIV_UL]"
+                      dataType="wstr"
+                      length="3"
+                      name="SDIV_UL" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[SECTION]"
+                      dataType="i2"
+                      name="SECTION" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[SPUD_DATE]"
+                      dataType="date"
+                      name="SPUD_DATE" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[TOWNSHIP]"
+                      dataType="wstr"
+                      length="5"
+                      name="TOWNSHIP" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[TVD_DEPTH]"
+                      dataType="i4"
+                      name="TVD_DEPTH" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[water_inj_2016]"
+                      dataType="i4"
+                      name="water_inj_2016" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[water_inj_2017]"
+                      dataType="i4"
+                      name="water_inj_2017" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[water_inj_2018]"
+                      dataType="i4"
+                      name="water_inj_2018" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[water_prod_2016]"
+                      dataType="i4"
+                      name="water_prod_2016" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[water_prod_2017]"
+                      dataType="i4"
+                      name="water_prod_2017" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[water_prod_2018]"
+                      dataType="i4"
+                      name="water_prod_2018" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[WELL_NAME]"
+                      dataType="wstr"
+                      length="46"
+                      name="WELL_NAME" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[WELL_TYPE]"
+                      dataType="wstr"
+                      length="1"
+                      name="WELL_TYPE" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[COMPL_STATUS]"
+                      dataType="wstr"
+                      length="100"
+                      name="COMPL_STATUS" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[COUNTY]"
+                      dataType="wstr"
+                      length="15"
+                      name="COUNTY" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[days_prod_2016]"
+                      dataType="i4"
+                      name="days_prod_2016" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[days_prod_2017]"
+                      dataType="i4"
+                      name="days_prod_2017" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[days_prod_2018]"
+                      dataType="i4"
+                      name="days_prod_2018" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[ELEVGL]"
+                      dataType="i4"
+                      name="ELEVGL" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[EW_CD]"
+                      dataType="wstr"
+                      length="1"
+                      name="EW_CD" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[FTG_EW]"
+                      dataType="i4"
+                      name="FTG_EW" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[FTG_NS]"
+                      dataType="i4"
+                      name="FTG_NS" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[gas_prod_2016]"
+                      dataType="i4"
+                      name="gas_prod_2016" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[gas_prod_2017]"
+                      dataType="i4"
+                      name="gas_prod_2017" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[gas_prod_2018]"
+                      dataType="i4"
+                      name="gas_prod_2018" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[LAND_TYPE]"
+                      dataType="wstr"
+                      length="2"
+                      name="LAND_TYPE" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[LAST_PROD_INJ]"
+                      dataType="wstr"
+                      length="7"
+                      name="LAST_PROD_INJ" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[LATITUDE]"
+                      dataType="r8"
+                      name="LATITUDE" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[LONGITUDE]"
+                      dataType="r8"
+                      name="LONGITUDE" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[NBR_COMPLS]"
+                      dataType="i4"
+                      name="NBR_COMPLS" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[NS_CD]"
+                      dataType="wstr"
+                      length="1"
+                      name="NS_CD" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[OCD_UL]"
+                      dataType="wstr"
+                      length="1"
+                      name="OCD_UL" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[OGRID_CDE]"
+                      dataType="i4"
+                      name="OGRID_CDE" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[oil_prod_2016]"
+                      dataType="i4"
+                      name="oil_prod_2016" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[oil_prod_2017]"
+                      dataType="i4"
+                      name="oil_prod_2017" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[oil_prod_2018]"
+                      dataType="i4"
+                      name="oil_prod_2018" />
+                    <externalMetadataColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output].ExternalColumns[ONE_PRODUCING_POOL_NAME]"
+                      dataType="wstr"
+                      length="35"
+                      name="ONE_PRODUCING_POOL_NAME" />
+                  </externalMetadataColumns>
+                </output>
+                <output
+                  refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output]"
+                  isErrorOut="true"
+                  name="OLE DB Source Error Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[ACRES]"
+                      dataType="r8"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[ACRES]"
+                      name="ACRES" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[API]"
+                      dataType="wstr"
+                      length="10"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[API]"
+                      name="API" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[OPERATOR]"
+                      dataType="wstr"
+                      length="45"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[OPERATOR]"
+                      name="OPERATOR" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[PLUG_DATE]"
+                      dataType="date"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[PLUG_DATE]"
+                      name="PLUG_DATE" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[PRODUCING_POOLID]"
+                      dataType="i4"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[PRODUCING_POOLID]"
+                      name="PRODUCING_POOLID" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[PROPERTY]"
+                      dataType="i4"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[PROPERTY]"
+                      name="PROPERTY" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[RANGE]"
+                      dataType="wstr"
+                      length="5"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[RANGE]"
+                      name="RANGE" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[SDIV_UL]"
+                      dataType="wstr"
+                      length="3"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[SDIV_UL]"
+                      name="SDIV_UL" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[SECTION]"
+                      dataType="i2"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[SECTION]"
+                      name="SECTION" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[SPUD_DATE]"
+                      dataType="date"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[SPUD_DATE]"
+                      name="SPUD_DATE" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[TOWNSHIP]"
+                      dataType="wstr"
+                      length="5"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[TOWNSHIP]"
+                      name="TOWNSHIP" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[TVD_DEPTH]"
+                      dataType="i4"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[TVD_DEPTH]"
+                      name="TVD_DEPTH" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[water_inj_2016]"
+                      dataType="i4"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[water_inj_2016]"
+                      name="water_inj_2016" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[water_inj_2017]"
+                      dataType="i4"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[water_inj_2017]"
+                      name="water_inj_2017" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[water_inj_2018]"
+                      dataType="i4"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[water_inj_2018]"
+                      name="water_inj_2018" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[water_prod_2016]"
+                      dataType="i4"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[water_prod_2016]"
+                      name="water_prod_2016" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[water_prod_2017]"
+                      dataType="i4"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[water_prod_2017]"
+                      name="water_prod_2017" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[water_prod_2018]"
+                      dataType="i4"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[water_prod_2018]"
+                      name="water_prod_2018" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[WELL_NAME]"
+                      dataType="wstr"
+                      length="46"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[WELL_NAME]"
+                      name="WELL_NAME" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[WELL_TYPE]"
+                      dataType="wstr"
+                      length="1"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[WELL_TYPE]"
+                      name="WELL_TYPE" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[COMPL_STATUS]"
+                      dataType="wstr"
+                      length="100"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[COMPL_STATUS]"
+                      name="COMPL_STATUS" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[COUNTY]"
+                      dataType="wstr"
+                      length="15"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[COUNTY]"
+                      name="COUNTY" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[days_prod_2016]"
+                      dataType="i4"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[days_prod_2016]"
+                      name="days_prod_2016" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[days_prod_2017]"
+                      dataType="i4"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[days_prod_2017]"
+                      name="days_prod_2017" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[days_prod_2018]"
+                      dataType="i4"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[days_prod_2018]"
+                      name="days_prod_2018" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[ELEVGL]"
+                      dataType="i4"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[ELEVGL]"
+                      name="ELEVGL" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[EW_CD]"
+                      dataType="wstr"
+                      length="1"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[EW_CD]"
+                      name="EW_CD" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[FTG_EW]"
+                      dataType="i4"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[FTG_EW]"
+                      name="FTG_EW" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[FTG_NS]"
+                      dataType="i4"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[FTG_NS]"
+                      name="FTG_NS" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[gas_prod_2016]"
+                      dataType="i4"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[gas_prod_2016]"
+                      name="gas_prod_2016" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[gas_prod_2017]"
+                      dataType="i4"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[gas_prod_2017]"
+                      name="gas_prod_2017" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[gas_prod_2018]"
+                      dataType="i4"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[gas_prod_2018]"
+                      name="gas_prod_2018" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[LAND_TYPE]"
+                      dataType="wstr"
+                      length="2"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[LAND_TYPE]"
+                      name="LAND_TYPE" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[LAST_PROD_INJ]"
+                      dataType="wstr"
+                      length="7"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[LAST_PROD_INJ]"
+                      name="LAST_PROD_INJ" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[LATITUDE]"
+                      dataType="r8"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[LATITUDE]"
+                      name="LATITUDE" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[LONGITUDE]"
+                      dataType="r8"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[LONGITUDE]"
+                      name="LONGITUDE" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[NBR_COMPLS]"
+                      dataType="i4"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[NBR_COMPLS]"
+                      name="NBR_COMPLS" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[NS_CD]"
+                      dataType="wstr"
+                      length="1"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[NS_CD]"
+                      name="NS_CD" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[OCD_UL]"
+                      dataType="wstr"
+                      length="1"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[OCD_UL]"
+                      name="OCD_UL" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[OGRID_CDE]"
+                      dataType="i4"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[OGRID_CDE]"
+                      name="OGRID_CDE" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[oil_prod_2016]"
+                      dataType="i4"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[oil_prod_2016]"
+                      name="oil_prod_2016" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[oil_prod_2017]"
+                      dataType="i4"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[oil_prod_2017]"
+                      name="oil_prod_2017" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[oil_prod_2018]"
+                      dataType="i4"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[oil_prod_2018]"
+                      name="oil_prod_2018" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[ONE_PRODUCING_POOL_NAME]"
+                      dataType="wstr"
+                      length="35"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[ONE_PRODUCING_POOL_NAME]"
+                      name="ONE_PRODUCING_POOL_NAME" />
+                    <outputColumn
+                      refId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+          </components>
+          <paths>
+            <path
+              refId="Package\Upload 1 Table.Paths[Data Conversion Output]"
+              endId="Package\Upload 1 Table\Destination - Production.Inputs[SQL Server Destination Input]"
+              name="Data Conversion Output"
+              startId="Package\Upload 1 Table\Data Conversion.Outputs[Data Conversion Output]" />
+            <path
+              refId="Package\Upload 1 Table.Paths[OLE DB Source Output]"
+              endId="Package\Upload 1 Table\Data Conversion.Inputs[Data Conversion Input]"
+              name="OLE DB Source Output"
+              startId="Package\Upload 1 Table\Source - Production.Outputs[OLE DB Source Output]" />
+          </paths>
+        </pipeline>
+      </DTS:ObjectData>
+    </DTS:Executable>
+  </DTS:Executables>
+  <DTS:PrecedenceConstraints>
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint]"
+      DTS:CreationName=""
+      DTS:DTSID="{B0A8139D-7E3D-430B-BC30-71939C4B631B}"
+      DTS:From="Package\Delete all Data"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint"
+      DTS:To="Package\Upload 1 Table" />
+  </DTS:PrecedenceConstraints>
+  <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
+<!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
+<!--If you manually edit this section and make a mistake, you can delete it. -->
+<!--The package will still be able to load normally but the previous layout information will be lost and the designer will automatically re-arrange the elements on the design surface.-->
+<Objects
+  Version="8">
+  <!--Each node below will contain properties that do not affect runtime behavior.-->
+  <Package
+    design-time-name="Package">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="148,42"
+          Id="Package\Delete all Data"
+          TopLeft="25.5,22.5" />
+        <NodeLayout
+          Size="150,42"
+          Id="Package\Upload 1 Table"
+          TopLeft="27,98" />
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint]"
+          TopLeft="100.75,64.5">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,33.5"
+              Start="0,0"
+              End="0,26">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,26" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </Package>
+  <TaskHost
+    design-time-name="Package\Upload 1 Table">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="8" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="192,42"
+          Id="Package\Upload 1 Table\Destination - Production"
+          TopLeft="42,199" />
+        <NodeLayout
+          Size="172,42"
+          Id="Package\Upload 1 Table\Source - Production"
+          TopLeft="45.5,12.9999999999999" />
+        <NodeLayout
+          Size="156,42"
+          Id="Package\Upload 1 Table\Data Conversion"
+          TopLeft="113,97" />
+        <EdgeLayout
+          Id="Package\Upload 1 Table.Paths[OLE DB Source Output]"
+          TopLeft="131.5,54.9999999999999">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="59.5,42.0000000000001"
+              Start="0,0"
+              End="59.5,34.5000000000001">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,17.0000000000001" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,17.0000000000001"
+                    Point2="0,21.0000000000001"
+                    Point3="4,21.0000000000001" />
+                  <mssgle:LineSegment
+                    End="55.5,21.0000000000001" />
+                  <mssgle:CubicBezierSegment
+                    Point1="55.5,21.0000000000001"
+                    Point2="59.5,21.0000000000001"
+                    Point3="59.5,25.0000000000001" />
+                  <mssgle:LineSegment
+                    End="59.5,34.5000000000001" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Upload 1 Table.Paths[Data Conversion Output]"
+          TopLeft="191,139">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-53,60"
+              Start="0,0"
+              End="-53,52.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,26" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,26"
+                    Point2="0,30"
+                    Point3="-4,30" />
+                  <mssgle:LineSegment
+                    End="-49,30" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-49,30"
+                    Point2="-53,30"
+                    Point3="-53,34" />
+                  <mssgle:LineSegment
+                    End="-53,52.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\Upload 1 Table\Destination - Production">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\Upload 1 Table\Source - Production">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+</Objects>]]></DTS:DesignTimeProperties>
+</DTS:Executable>

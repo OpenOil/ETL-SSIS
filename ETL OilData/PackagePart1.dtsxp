@@ -1,0 +1,27 @@
+﻿<?xml version="1.0"?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:refId="PackagePart"
+  DTS:CreationDate="8/3/2018 8:11:18 AM"
+  DTS:CreationName="Microsoft.DTSPackagePart"
+  DTS:CreatorComputerName="SQL"
+  DTS:CreatorName="SQL\nova"
+  DTS:DTSID="{8CDDBD2F-14F1-4734-9C39-6F18D32362C9}"
+  DTS:ExecutableType="Microsoft.DTSPackagePart"
+  DTS:LastModifiedProductVersion="14.0.3026.27"
+  DTS:LocaleID="1033"
+  DTS:ObjectName="PackagePart1"
+  DTS:VersionBuild="1"
+  DTS:VersionGUID="{72426A6A-A66A-4B13-B011-51980DF2F00B}">
+  <DTS:Property
+    DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:Variables />
+  <DTS:Executables />
+  <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
+<!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
+<!--If you manually edit this section and make a mistake, you can delete it. -->
+<!--The package will still be able to load normally but the previous layout information will be lost and the designer will automatically re-arrange the elements on the design surface.-->
+<Objects
+  Version="8">
+  <!--Each node below will contain properties that do not affect runtime behavior.-->
+</Objects>]]></DTS:DesignTimeProperties>
+</DTS:Executable>

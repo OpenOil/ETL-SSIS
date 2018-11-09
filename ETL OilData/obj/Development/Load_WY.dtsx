@@ -1,0 +1,1998 @@
+<?xml version="1.0"?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:refId="Package"
+  DTS:CreationDate="5/15/2018 5:24:49 PM"
+  DTS:CreationName="Microsoft.Package"
+  DTS:CreatorComputerName="DESKTOP-CUCO6BD"
+  DTS:CreatorName="DESKTOP-CUCO6BD\GreenTrust"
+  DTS:DTSID="{52EEE39A-0B9E-4FFB-B0AF-BA53225F9BE7}"
+  DTS:ExecutableType="Microsoft.Package"
+  DTS:LastModifiedProductVersion="14.0.3026.27"
+  DTS:LocaleID="1033"
+  DTS:ObjectName="Load_WY"
+  DTS:PackageType="5"
+  DTS:VersionBuild="54"
+  DTS:VersionGUID="{13F98258-F202-43BA-BB99-756533328E45}">
+  <DTS:Property
+    DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:ConnectionManagers>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[Destination_SQL]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{6AFAF2F1-BDC4-424A-A8B7-15E26910C59E}"
+      DTS:ObjectName="Destination_SQL">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectionString="Data Source=SQL\GREENTRUST;Initial Catalog=OilData;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=false;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[Destination_T-SQL]"
+      DTS:CreationName="ADO.NET:SQL"
+      DTS:DTSID="{0ED1AFA1-9DA6-48C1-AA03-275F6EA84665}"
+      DTS:ObjectName="Destination_T-SQL">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectionString="Data Source=SQL\GREENTRUST;Initial Catalog=OilData;Integrated Security=True;Connect Timeout=30;Application Name=SSIS-Load_WY-{0ED1AFA1-9DA6-48C1-AA03-275F6EA84665}Destination_T-SQL;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[Source_Excel]"
+      DTS:CreationName="EXCEL"
+      DTS:DTSID="{E74C4244-C926-49A5-996F-A3D6A6C97C77}"
+      DTS:ObjectName="Source_Excel">
+      <DTS:PropertyExpression
+        DTS:Name="ExcelFilePath">@[User::FilePath]</DTS:PropertyExpression>
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectionString="Provider=Microsoft.ACE.OLEDB.12.0;Data Source=D:\Oil Data\WY\Counties01-05_041018.xlsx;Extended Properties=&quot;EXCEL 12.0 XML;HDR=YES&quot;;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+  </DTS:ConnectionManagers>
+  <DTS:Variables>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{6FA13783-0F62-46C1-8F33-869961E05012}"
+      DTS:EvaluateAsExpression="True"
+      DTS:Expression="RIGHT( @[User::FilePath] , 25 )"
+      DTS:IncludeInDebugDump="2345"
+      DTS:Namespace="User"
+      DTS:ObjectName="FileName">
+      <DTS:VariableValue
+        DTS:DataType="8">Counties01-05_041018.xlsx</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{263C6CA7-CC8C-4428-8C19-5FDBDFA33DD7}"
+      DTS:IncludeInDebugDump="2345"
+      DTS:Namespace="User"
+      DTS:ObjectName="FilePath">
+      <DTS:VariableValue
+        DTS:DataType="8">D:\Oil Data\WY\Counties01-05_041018.xlsx</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{47E10CB5-5018-4900-B9F4-B13C8C140EAA}"
+      DTS:EvaluateAsExpression="True"
+      DTS:Expression="REPLACE( LEFT( @[User::FileName], 14 ), &quot;-&quot;, &quot;_&quot; )  + &quot;100917&quot;"
+      DTS:IncludeInDebugDump="2345"
+      DTS:Namespace="User"
+      DTS:ObjectName="SheetName">
+      <DTS:VariableValue
+        DTS:DataType="8">Counties01_05_100917</DTS:VariableValue>
+    </DTS:Variable>
+  </DTS:Variables>
+  <DTS:Executables>
+    <DTS:Executable
+      DTS:refId="Package\Delete all Data"
+      DTS:CreationName="Microsoft.DbMaintenanceTSQLExecuteTask"
+      DTS:Description="Execute T-SQL Statement Task"
+      DTS:DTSID="{481C9A8E-A6A5-4B1F-9A79-AE7E50A94267}"
+      DTS:ExecutableType="Microsoft.DbMaintenanceTSQLExecuteTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Delete all Data"
+      DTS:TaskContact="Execute T-SQL Statement Task; Microsoft Corporation; Microsoft SQL Server v9; © 2004 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{0ED1AFA1-9DA6-48C1-AA03-275F6EA84665}"
+          SQLTask:SqlStatementSource="USE OilData;&#xA;&#xA;TRUNCATE TABLE dbo.WY_Production;"
+          SQLTask:ServerVersion="9"
+          SQLTask:ExtendedLogging="True"
+          SQLTask:LocalConnectionForLogging=""
+          SQLTask:TaskName=""
+          SQLTask:IgnoreDatabasesInNotOnlineState="False" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Foreach Excel File in Historical"
+      DTS:CreationName="STOCK:FOREACHLOOP"
+      DTS:Description="Runs through all Excel files in folder."
+      DTS:DTSID="{82E8C780-8EDD-4933-BE92-195E2C661401}"
+      DTS:ExecutableType="STOCK:FOREACHLOOP"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Foreach Excel File in Historical">
+      <DTS:ForEachEnumerator
+        DTS:CreationName="Microsoft.ForEachFileEnumerator"
+        DTS:DTSID="{DF84A8DE-0EC1-49DF-A7F0-7606206FF624}"
+        DTS:ObjectName="{DF84A8DE-0EC1-49DF-A7F0-7606206FF624}">
+        <DTS:ObjectData>
+          <ForEachFileEnumeratorProperties>
+            <FEFEProperty
+              Folder="D:\Oil Data\WY" />
+            <FEFEProperty
+              FileSpec="*.xlsx" />
+            <FEFEProperty
+              FileNameRetrievalType="0" />
+            <FEFEProperty
+              Recurse="0" />
+          </ForEachFileEnumeratorProperties>
+        </DTS:ObjectData>
+      </DTS:ForEachEnumerator>
+      <DTS:Variables />
+      <DTS:Executables>
+        <DTS:Executable
+          DTS:refId="Package\Foreach Excel File in Historical\Upload File"
+          DTS:CreationName="Microsoft.Pipeline"
+          DTS:Description="Data Flow Task"
+          DTS:DTSID="{BEDB1CAE-B8DB-4AC1-83FD-0951339CCF21}"
+          DTS:ExecutableType="Microsoft.Pipeline"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Upload File"
+          DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <pipeline
+              version="1">
+              <components>
+                <component
+                  refId="Package\Foreach Excel File in Historical\Upload File\Excel Source"
+                  componentClassID="Microsoft.ExcelSource"
+                  contactInfo="Excel Source;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;1"
+                  description="Excel Source"
+                  name="Excel Source"
+                  usesDispositions="true"
+                  version="1">
+                  <properties>
+                    <property
+                      dataType="System.Int32"
+                      description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                      name="CommandTimeout">0</property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies the name of the database object used to open a rowset."
+                      name="OpenRowset"></property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies the variable that contains the name of the database object used to open a rowset."
+                      name="OpenRowsetVariable">User::SheetName</property>
+                    <property
+                      dataType="System.String"
+                      description="The SQL command to be executed."
+                      name="SqlCommand"
+                      UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                    <property
+                      dataType="System.String"
+                      description="The variable that contains the SQL command to be executed."
+                      name="SqlCommandVariable"></property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the mode used to access the database."
+                      name="AccessMode"
+                      typeConverter="AccessMode">1</property>
+                    <property
+                      dataType="System.String"
+                      description="The mapping from parameters in the SQL command to variables."
+                      name="ParameterMapping"></property>
+                  </properties>
+                  <connections>
+                    <connection
+                      refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Connections[OleDbConnection]"
+                      connectionManagerID="Package.ConnectionManagers[Source_Excel]"
+                      connectionManagerRefId="Package.ConnectionManagers[Source_Excel]"
+                      description="The OLE DB runtime connection used to access the database."
+                      name="OleDbConnection" />
+                  </connections>
+                  <outputs>
+                    <output
+                      refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output]"
+                      name="Excel Source Output">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[APINO]"
+                          dataType="r8"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[APINO]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[APINO]"
+                          name="APINO"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[COMPANY]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[COMPANY]"
+                          length="255"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[COMPANY]"
+                          name="COMPANY"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[YR]"
+                          dataType="r8"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[YR]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[YR]"
+                          name="YR"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[JAN_OIL]"
+                          dataType="r8"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[JAN_OIL]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[JAN_OIL]"
+                          name="JAN_OIL"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[JAN_GAS]"
+                          dataType="r8"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[JAN_GAS]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[JAN_GAS]"
+                          name="JAN_GAS"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[JAN_WATER]"
+                          dataType="r8"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[JAN_WATER]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[JAN_WATER]"
+                          name="JAN_WATER"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[JAN_DAYS]"
+                          dataType="r8"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[JAN_DAYS]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[JAN_DAYS]"
+                          name="JAN_DAYS"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[FEB_OIL]"
+                          dataType="r8"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[FEB_OIL]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[FEB_OIL]"
+                          name="FEB_OIL"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[FEB_GAS]"
+                          dataType="r8"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[FEB_GAS]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[FEB_GAS]"
+                          name="FEB_GAS"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[FEB_WATER]"
+                          dataType="r8"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[FEB_WATER]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[FEB_WATER]"
+                          name="FEB_WATER"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[FEB_DAYS]"
+                          dataType="r8"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[FEB_DAYS]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[FEB_DAYS]"
+                          name="FEB_DAYS"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[MAR_OIL]"
+                          dataType="r8"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[MAR_OIL]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[MAR_OIL]"
+                          name="MAR_OIL"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[MAR_GAS]"
+                          dataType="r8"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[MAR_GAS]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[MAR_GAS]"
+                          name="MAR_GAS"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[MAR_WATER]"
+                          dataType="r8"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[MAR_WATER]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[MAR_WATER]"
+                          name="MAR_WATER"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[MAR_DAYS]"
+                          dataType="r8"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[MAR_DAYS]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[MAR_DAYS]"
+                          name="MAR_DAYS"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[APR_OIL]"
+                          dataType="r8"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[APR_OIL]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[APR_OIL]"
+                          name="APR_OIL"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[APR_GAS]"
+                          dataType="r8"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[APR_GAS]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[APR_GAS]"
+                          name="APR_GAS"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[APR_WATER]"
+                          dataType="r8"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[APR_WATER]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[APR_WATER]"
+                          name="APR_WATER"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[APR_DAYS]"
+                          dataType="r8"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[APR_DAYS]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[APR_DAYS]"
+                          name="APR_DAYS"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[MAY_OIL]"
+                          dataType="r8"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[MAY_OIL]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[MAY_OIL]"
+                          name="MAY_OIL"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[MAY_GAS]"
+                          dataType="r8"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[MAY_GAS]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[MAY_GAS]"
+                          name="MAY_GAS"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[MAY_WATER]"
+                          dataType="r8"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[MAY_WATER]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[MAY_WATER]"
+                          name="MAY_WATER"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[MAY_DAYS]"
+                          dataType="r8"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[MAY_DAYS]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[MAY_DAYS]"
+                          name="MAY_DAYS"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[JUN_OIL]"
+                          dataType="r8"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[JUN_OIL]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[JUN_OIL]"
+                          name="JUN_OIL"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[JUN_GAS]"
+                          dataType="r8"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[JUN_GAS]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[JUN_GAS]"
+                          name="JUN_GAS"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[JUN_WATER]"
+                          dataType="r8"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[JUN_WATER]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[JUN_WATER]"
+                          name="JUN_WATER"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[JUN_DAYS]"
+                          dataType="r8"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[JUN_DAYS]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[JUN_DAYS]"
+                          name="JUN_DAYS"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[JUL_OIL]"
+                          dataType="r8"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[JUL_OIL]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[JUL_OIL]"
+                          name="JUL_OIL"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[JUL_GAS]"
+                          dataType="r8"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[JUL_GAS]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[JUL_GAS]"
+                          name="JUL_GAS"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[JUL_WATER]"
+                          dataType="r8"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[JUL_WATER]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[JUL_WATER]"
+                          name="JUL_WATER"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[JUL_DAYS]"
+                          dataType="r8"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[JUL_DAYS]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[JUL_DAYS]"
+                          name="JUL_DAYS"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[AUG_OIL]"
+                          dataType="r8"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[AUG_OIL]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[AUG_OIL]"
+                          name="AUG_OIL"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[AUG_GAS]"
+                          dataType="r8"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[AUG_GAS]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[AUG_GAS]"
+                          name="AUG_GAS"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[AUG_WATER]"
+                          dataType="r8"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[AUG_WATER]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[AUG_WATER]"
+                          name="AUG_WATER"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[AUG_DAYS]"
+                          dataType="r8"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[AUG_DAYS]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[AUG_DAYS]"
+                          name="AUG_DAYS"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[SEP_OIL]"
+                          dataType="r8"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[SEP_OIL]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[SEP_OIL]"
+                          name="SEP_OIL"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[SEP_GAS]"
+                          dataType="r8"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[SEP_GAS]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[SEP_GAS]"
+                          name="SEP_GAS"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[SEP_WATER]"
+                          dataType="r8"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[SEP_WATER]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[SEP_WATER]"
+                          name="SEP_WATER"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[SEP_DAYS]"
+                          dataType="r8"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[SEP_DAYS]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[SEP_DAYS]"
+                          name="SEP_DAYS"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[OCT_OIL]"
+                          dataType="r8"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[OCT_OIL]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[OCT_OIL]"
+                          name="OCT_OIL"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[OCT_GAS]"
+                          dataType="r8"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[OCT_GAS]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[OCT_GAS]"
+                          name="OCT_GAS"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[OCT_WATER]"
+                          dataType="r8"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[OCT_WATER]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[OCT_WATER]"
+                          name="OCT_WATER"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[OCT_DAYS]"
+                          dataType="r8"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[OCT_DAYS]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[OCT_DAYS]"
+                          name="OCT_DAYS"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[NOV_OIL]"
+                          dataType="r8"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[NOV_OIL]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[NOV_OIL]"
+                          name="NOV_OIL"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[NOV_GAS]"
+                          dataType="r8"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[NOV_GAS]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[NOV_GAS]"
+                          name="NOV_GAS"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[NOV_WATER]"
+                          dataType="r8"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[NOV_WATER]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[NOV_WATER]"
+                          name="NOV_WATER"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[NOV_DAYS]"
+                          dataType="r8"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[NOV_DAYS]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[NOV_DAYS]"
+                          name="NOV_DAYS"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[DEC_OIL]"
+                          dataType="r8"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[DEC_OIL]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[DEC_OIL]"
+                          name="DEC_OIL"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[DEC_GAS]"
+                          dataType="r8"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[DEC_GAS]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[DEC_GAS]"
+                          name="DEC_GAS"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[DEC_WATER]"
+                          dataType="r8"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[DEC_WATER]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[DEC_WATER]"
+                          name="DEC_WATER"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[DEC_DAYS]"
+                          dataType="r8"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[DEC_DAYS]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[DEC_DAYS]"
+                          name="DEC_DAYS"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[API_RES]"
+                          dataType="r8"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[API_RES]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[API_RES]"
+                          name="API_RES"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[ResCode]"
+                          dataType="r8"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[ResCode]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[ResCode]"
+                          name="ResCode"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[Reservoir]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[Reservoir]"
+                          length="255"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[Reservoir]"
+                          name="Reservoir"
+                          truncationRowDisposition="FailComponent" />
+                      </outputColumns>
+                      <externalMetadataColumns
+                        isUsed="True">
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[APINO]"
+                          dataType="r8"
+                          name="APINO" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[COMPANY]"
+                          dataType="wstr"
+                          length="255"
+                          name="COMPANY" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[YR]"
+                          dataType="r8"
+                          name="YR" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[JAN_OIL]"
+                          dataType="r8"
+                          name="JAN_OIL" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[JAN_GAS]"
+                          dataType="r8"
+                          name="JAN_GAS" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[JAN_WATER]"
+                          dataType="r8"
+                          name="JAN_WATER" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[JAN_DAYS]"
+                          dataType="r8"
+                          name="JAN_DAYS" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[FEB_OIL]"
+                          dataType="r8"
+                          name="FEB_OIL" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[FEB_GAS]"
+                          dataType="r8"
+                          name="FEB_GAS" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[FEB_WATER]"
+                          dataType="r8"
+                          name="FEB_WATER" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[FEB_DAYS]"
+                          dataType="r8"
+                          name="FEB_DAYS" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[MAR_OIL]"
+                          dataType="r8"
+                          name="MAR_OIL" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[MAR_GAS]"
+                          dataType="r8"
+                          name="MAR_GAS" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[MAR_WATER]"
+                          dataType="r8"
+                          name="MAR_WATER" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[MAR_DAYS]"
+                          dataType="r8"
+                          name="MAR_DAYS" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[APR_OIL]"
+                          dataType="r8"
+                          name="APR_OIL" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[APR_GAS]"
+                          dataType="r8"
+                          name="APR_GAS" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[APR_WATER]"
+                          dataType="r8"
+                          name="APR_WATER" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[APR_DAYS]"
+                          dataType="r8"
+                          name="APR_DAYS" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[MAY_OIL]"
+                          dataType="r8"
+                          name="MAY_OIL" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[MAY_GAS]"
+                          dataType="r8"
+                          name="MAY_GAS" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[MAY_WATER]"
+                          dataType="r8"
+                          name="MAY_WATER" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[MAY_DAYS]"
+                          dataType="r8"
+                          name="MAY_DAYS" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[JUN_OIL]"
+                          dataType="r8"
+                          name="JUN_OIL" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[JUN_GAS]"
+                          dataType="r8"
+                          name="JUN_GAS" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[JUN_WATER]"
+                          dataType="r8"
+                          name="JUN_WATER" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[JUN_DAYS]"
+                          dataType="r8"
+                          name="JUN_DAYS" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[JUL_OIL]"
+                          dataType="r8"
+                          name="JUL_OIL" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[JUL_GAS]"
+                          dataType="r8"
+                          name="JUL_GAS" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[JUL_WATER]"
+                          dataType="r8"
+                          name="JUL_WATER" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[JUL_DAYS]"
+                          dataType="r8"
+                          name="JUL_DAYS" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[AUG_OIL]"
+                          dataType="r8"
+                          name="AUG_OIL" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[AUG_GAS]"
+                          dataType="r8"
+                          name="AUG_GAS" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[AUG_WATER]"
+                          dataType="r8"
+                          name="AUG_WATER" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[AUG_DAYS]"
+                          dataType="r8"
+                          name="AUG_DAYS" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[SEP_OIL]"
+                          dataType="r8"
+                          name="SEP_OIL" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[SEP_GAS]"
+                          dataType="r8"
+                          name="SEP_GAS" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[SEP_WATER]"
+                          dataType="r8"
+                          name="SEP_WATER" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[SEP_DAYS]"
+                          dataType="r8"
+                          name="SEP_DAYS" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[OCT_OIL]"
+                          dataType="r8"
+                          name="OCT_OIL" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[OCT_GAS]"
+                          dataType="r8"
+                          name="OCT_GAS" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[OCT_WATER]"
+                          dataType="r8"
+                          name="OCT_WATER" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[OCT_DAYS]"
+                          dataType="r8"
+                          name="OCT_DAYS" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[NOV_OIL]"
+                          dataType="r8"
+                          name="NOV_OIL" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[NOV_GAS]"
+                          dataType="r8"
+                          name="NOV_GAS" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[NOV_WATER]"
+                          dataType="r8"
+                          name="NOV_WATER" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[NOV_DAYS]"
+                          dataType="r8"
+                          name="NOV_DAYS" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[DEC_OIL]"
+                          dataType="r8"
+                          name="DEC_OIL" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[DEC_GAS]"
+                          dataType="r8"
+                          name="DEC_GAS" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[DEC_WATER]"
+                          dataType="r8"
+                          name="DEC_WATER" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[DEC_DAYS]"
+                          dataType="r8"
+                          name="DEC_DAYS" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[API_RES]"
+                          dataType="r8"
+                          name="API_RES" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[ResCode]"
+                          dataType="r8"
+                          name="ResCode" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].ExternalColumns[Reservoir]"
+                          dataType="wstr"
+                          length="255"
+                          name="Reservoir" />
+                      </externalMetadataColumns>
+                    </output>
+                    <output
+                      refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output]"
+                      isErrorOut="true"
+                      name="Excel Source Error Output">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[APINO]"
+                          dataType="r8"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[APINO]"
+                          name="APINO" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[COMPANY]"
+                          dataType="wstr"
+                          length="255"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[COMPANY]"
+                          name="COMPANY" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[YR]"
+                          dataType="r8"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[YR]"
+                          name="YR" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[JAN_OIL]"
+                          dataType="r8"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[JAN_OIL]"
+                          name="JAN_OIL" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[JAN_GAS]"
+                          dataType="r8"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[JAN_GAS]"
+                          name="JAN_GAS" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[JAN_WATER]"
+                          dataType="r8"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[JAN_WATER]"
+                          name="JAN_WATER" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[JAN_DAYS]"
+                          dataType="r8"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[JAN_DAYS]"
+                          name="JAN_DAYS" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[FEB_OIL]"
+                          dataType="r8"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[FEB_OIL]"
+                          name="FEB_OIL" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[FEB_GAS]"
+                          dataType="r8"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[FEB_GAS]"
+                          name="FEB_GAS" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[FEB_WATER]"
+                          dataType="r8"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[FEB_WATER]"
+                          name="FEB_WATER" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[FEB_DAYS]"
+                          dataType="r8"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[FEB_DAYS]"
+                          name="FEB_DAYS" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[MAR_OIL]"
+                          dataType="r8"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[MAR_OIL]"
+                          name="MAR_OIL" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[MAR_GAS]"
+                          dataType="r8"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[MAR_GAS]"
+                          name="MAR_GAS" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[MAR_WATER]"
+                          dataType="r8"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[MAR_WATER]"
+                          name="MAR_WATER" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[MAR_DAYS]"
+                          dataType="r8"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[MAR_DAYS]"
+                          name="MAR_DAYS" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[APR_OIL]"
+                          dataType="r8"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[APR_OIL]"
+                          name="APR_OIL" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[APR_GAS]"
+                          dataType="r8"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[APR_GAS]"
+                          name="APR_GAS" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[APR_WATER]"
+                          dataType="r8"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[APR_WATER]"
+                          name="APR_WATER" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[APR_DAYS]"
+                          dataType="r8"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[APR_DAYS]"
+                          name="APR_DAYS" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[MAY_OIL]"
+                          dataType="r8"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[MAY_OIL]"
+                          name="MAY_OIL" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[MAY_GAS]"
+                          dataType="r8"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[MAY_GAS]"
+                          name="MAY_GAS" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[MAY_WATER]"
+                          dataType="r8"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[MAY_WATER]"
+                          name="MAY_WATER" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[MAY_DAYS]"
+                          dataType="r8"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[MAY_DAYS]"
+                          name="MAY_DAYS" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[JUN_OIL]"
+                          dataType="r8"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[JUN_OIL]"
+                          name="JUN_OIL" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[JUN_GAS]"
+                          dataType="r8"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[JUN_GAS]"
+                          name="JUN_GAS" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[JUN_WATER]"
+                          dataType="r8"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[JUN_WATER]"
+                          name="JUN_WATER" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[JUN_DAYS]"
+                          dataType="r8"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[JUN_DAYS]"
+                          name="JUN_DAYS" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[JUL_OIL]"
+                          dataType="r8"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[JUL_OIL]"
+                          name="JUL_OIL" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[JUL_GAS]"
+                          dataType="r8"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[JUL_GAS]"
+                          name="JUL_GAS" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[JUL_WATER]"
+                          dataType="r8"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[JUL_WATER]"
+                          name="JUL_WATER" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[JUL_DAYS]"
+                          dataType="r8"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[JUL_DAYS]"
+                          name="JUL_DAYS" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[AUG_OIL]"
+                          dataType="r8"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[AUG_OIL]"
+                          name="AUG_OIL" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[AUG_GAS]"
+                          dataType="r8"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[AUG_GAS]"
+                          name="AUG_GAS" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[AUG_WATER]"
+                          dataType="r8"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[AUG_WATER]"
+                          name="AUG_WATER" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[AUG_DAYS]"
+                          dataType="r8"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[AUG_DAYS]"
+                          name="AUG_DAYS" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[SEP_OIL]"
+                          dataType="r8"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[SEP_OIL]"
+                          name="SEP_OIL" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[SEP_GAS]"
+                          dataType="r8"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[SEP_GAS]"
+                          name="SEP_GAS" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[SEP_WATER]"
+                          dataType="r8"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[SEP_WATER]"
+                          name="SEP_WATER" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[SEP_DAYS]"
+                          dataType="r8"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[SEP_DAYS]"
+                          name="SEP_DAYS" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[OCT_OIL]"
+                          dataType="r8"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[OCT_OIL]"
+                          name="OCT_OIL" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[OCT_GAS]"
+                          dataType="r8"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[OCT_GAS]"
+                          name="OCT_GAS" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[OCT_WATER]"
+                          dataType="r8"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[OCT_WATER]"
+                          name="OCT_WATER" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[OCT_DAYS]"
+                          dataType="r8"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[OCT_DAYS]"
+                          name="OCT_DAYS" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[NOV_OIL]"
+                          dataType="r8"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[NOV_OIL]"
+                          name="NOV_OIL" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[NOV_GAS]"
+                          dataType="r8"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[NOV_GAS]"
+                          name="NOV_GAS" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[NOV_WATER]"
+                          dataType="r8"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[NOV_WATER]"
+                          name="NOV_WATER" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[NOV_DAYS]"
+                          dataType="r8"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[NOV_DAYS]"
+                          name="NOV_DAYS" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[DEC_OIL]"
+                          dataType="r8"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[DEC_OIL]"
+                          name="DEC_OIL" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[DEC_GAS]"
+                          dataType="r8"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[DEC_GAS]"
+                          name="DEC_GAS" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[DEC_WATER]"
+                          dataType="r8"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[DEC_WATER]"
+                          name="DEC_WATER" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[DEC_DAYS]"
+                          dataType="r8"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[DEC_DAYS]"
+                          name="DEC_DAYS" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[API_RES]"
+                          dataType="r8"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[API_RES]"
+                          name="API_RES" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[ResCode]"
+                          dataType="r8"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[ResCode]"
+                          name="ResCode" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[Reservoir]"
+                          dataType="wstr"
+                          length="255"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[Reservoir]"
+                          name="Reservoir" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[ErrorCode]"
+                          dataType="i4"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[ErrorCode]"
+                          name="ErrorCode"
+                          specialFlags="1" />
+                        <outputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[ErrorColumn]"
+                          dataType="i4"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Error Output].Columns[ErrorColumn]"
+                          name="ErrorColumn"
+                          specialFlags="2" />
+                      </outputColumns>
+                      <externalMetadataColumns />
+                    </output>
+                  </outputs>
+                </component>
+                <component
+                  refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination"
+                  componentClassID="Microsoft.SQLServerDestination"
+                  contactInfo="SQL Server Destination;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;5"
+                  description="SQL Server Destination"
+                  name="SQL Server Destination"
+                  version="5">
+                  <properties>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the column code page to use when code page information is unavailable from the data source."
+                      name="DefaultCodePage">1252</property>
+                    <property
+                      dataType="System.Boolean"
+                      description="Forces the use of the DefaultCodePage property value when describing character data."
+                      name="AlwaysUseDefaultCodePage">false</property>
+                    <property
+                      dataType="System.String"
+                      description="The name of the database object to copy data into."
+                      expressionType="Notify"
+                      name="BulkInsertTableName">[WY_Production]</property>
+                    <property
+                      dataType="System.Boolean"
+                      description="Specifies that any constraints on the destination object are checked during the data copy operation. Corresponds to the bulk insert CHECK_CONSTRAINTS option."
+                      name="BulkInsertCheckConstraints">false</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the number of the first row to copy. Corresponds to the bulk insert FIRSTROW option."
+                      expressionType="Notify"
+                      name="BulkInsertFirstRow">-1</property>
+                    <property
+                      dataType="System.Boolean"
+                      description="Specifies that any insert triggers defined on the destination object will execute during the data copy. Corresponds to the bulk insert FIRE_TRIGGERS option."
+                      name="BulkInsertFireTriggers">false</property>
+                    <property
+                      dataType="System.Boolean"
+                      description="Indicates whether the values supplied for identity columns will be copied to the destination. If false, values for identity columns will be auto-generated at the destination. Corresponds to the bulk insert KEEPIDENTITY option."
+                      name="BulkInsertKeepIdentity">false</property>
+                    <property
+                      dataType="System.Boolean"
+                      description="Indicates whether the columns containing null will have null copied to the destination. If false, columns containing null will have their default values inserted at the destination. Applies only if fast load is turned on."
+                      name="BulkInsertKeepNulls">false</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the number of the last row to copy. Corresponds to the bulk insert LASTROW option."
+                      expressionType="Notify"
+                      name="BulkInsertLastRow">-1</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the maximum number of syntax errors and compilation errors that can occur before the data copy operation is canceled. Each row that cannot be copied is ignored and counted as one error. Corresponds to the bulk insert MAXERRORS option."
+                      name="BulkInsertMaxErrors">-1</property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies how the data to be copied is sorted. Corresponds to the bulk insert ORDER option."
+                      expressionType="Notify"
+                      name="BulkInsertOrder"></property>
+                    <property
+                      dataType="System.Boolean"
+                      description="Specifies that a table-level lock is acquired for the duration of the data copy operation. Corresponds to the bulk insert TABLOCK option."
+                      name="BulkInsertTablock">true</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies in seconds the amount of time the SQL Destination adapter will wait before terminating if there is no data available for insertion.  A timeout value of 0 means the SQL Destination adapter will not time out."
+                      expressionType="Notify"
+                      name="Timeout">30</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies when commits are issued during data insertion.  A value of 0 specifies that one commit will be issued at the end of data insertion."
+                      name="MaxInsertCommitSize">0</property>
+                  </properties>
+                  <connections>
+                    <connection
+                      refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Connections[OleDbConnection]"
+                      connectionManagerID="Package.ConnectionManagers[Destination_SQL]"
+                      connectionManagerRefId="Package.ConnectionManagers[Destination_SQL]"
+                      description="The OLE DB runtime connection used to access the database."
+                      name="OleDbConnection" />
+                  </connections>
+                  <inputs>
+                    <input
+                      refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input]"
+                      hasSideEffects="true"
+                      name="SQL Server Destination Input">
+                      <inputColumns>
+                        <inputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].Columns[APINO]"
+                          cachedDataType="r8"
+                          cachedName="APINO"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[APINO]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[APINO]" />
+                        <inputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].Columns[COMPANY]"
+                          cachedDataType="wstr"
+                          cachedLength="255"
+                          cachedName="COMPANY"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[COMPANY]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[COMPANY]" />
+                        <inputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].Columns[YR]"
+                          cachedDataType="r8"
+                          cachedName="YR"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[YR]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[YR]" />
+                        <inputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].Columns[JAN_OIL]"
+                          cachedDataType="r8"
+                          cachedName="JAN_OIL"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[JAN_OIL]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[JAN_OIL]" />
+                        <inputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].Columns[JAN_GAS]"
+                          cachedDataType="r8"
+                          cachedName="JAN_GAS"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[JAN_GAS]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[JAN_GAS]" />
+                        <inputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].Columns[JAN_WATER]"
+                          cachedDataType="r8"
+                          cachedName="JAN_WATER"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[JAN_WATER]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[JAN_WATER]" />
+                        <inputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].Columns[JAN_DAYS]"
+                          cachedDataType="r8"
+                          cachedName="JAN_DAYS"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[JAN_DAYS]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[JAN_DAYS]" />
+                        <inputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].Columns[FEB_OIL]"
+                          cachedDataType="r8"
+                          cachedName="FEB_OIL"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[FEB_OIL]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[FEB_OIL]" />
+                        <inputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].Columns[FEB_GAS]"
+                          cachedDataType="r8"
+                          cachedName="FEB_GAS"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[FEB_GAS]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[FEB_GAS]" />
+                        <inputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].Columns[FEB_WATER]"
+                          cachedDataType="r8"
+                          cachedName="FEB_WATER"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[FEB_WATER]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[FEB_WATER]" />
+                        <inputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].Columns[FEB_DAYS]"
+                          cachedDataType="r8"
+                          cachedName="FEB_DAYS"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[FEB_DAYS]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[FEB_DAYS]" />
+                        <inputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].Columns[MAR_OIL]"
+                          cachedDataType="r8"
+                          cachedName="MAR_OIL"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[MAR_OIL]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[MAR_OIL]" />
+                        <inputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].Columns[MAR_GAS]"
+                          cachedDataType="r8"
+                          cachedName="MAR_GAS"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[MAR_GAS]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[MAR_GAS]" />
+                        <inputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].Columns[MAR_WATER]"
+                          cachedDataType="r8"
+                          cachedName="MAR_WATER"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[MAR_WATER]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[MAR_WATER]" />
+                        <inputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].Columns[MAR_DAYS]"
+                          cachedDataType="r8"
+                          cachedName="MAR_DAYS"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[MAR_DAYS]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[MAR_DAYS]" />
+                        <inputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].Columns[APR_OIL]"
+                          cachedDataType="r8"
+                          cachedName="APR_OIL"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[APR_OIL]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[APR_OIL]" />
+                        <inputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].Columns[APR_GAS]"
+                          cachedDataType="r8"
+                          cachedName="APR_GAS"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[APR_GAS]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[APR_GAS]" />
+                        <inputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].Columns[APR_WATER]"
+                          cachedDataType="r8"
+                          cachedName="APR_WATER"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[APR_WATER]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[APR_WATER]" />
+                        <inputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].Columns[APR_DAYS]"
+                          cachedDataType="r8"
+                          cachedName="APR_DAYS"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[APR_DAYS]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[APR_DAYS]" />
+                        <inputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].Columns[MAY_OIL]"
+                          cachedDataType="r8"
+                          cachedName="MAY_OIL"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[MAY_OIL]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[MAY_OIL]" />
+                        <inputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].Columns[MAY_GAS]"
+                          cachedDataType="r8"
+                          cachedName="MAY_GAS"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[MAY_GAS]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[MAY_GAS]" />
+                        <inputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].Columns[MAY_WATER]"
+                          cachedDataType="r8"
+                          cachedName="MAY_WATER"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[MAY_WATER]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[MAY_WATER]" />
+                        <inputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].Columns[MAY_DAYS]"
+                          cachedDataType="r8"
+                          cachedName="MAY_DAYS"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[MAY_DAYS]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[MAY_DAYS]" />
+                        <inputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].Columns[JUN_OIL]"
+                          cachedDataType="r8"
+                          cachedName="JUN_OIL"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[JUN_OIL]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[JUN_OIL]" />
+                        <inputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].Columns[JUN_GAS]"
+                          cachedDataType="r8"
+                          cachedName="JUN_GAS"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[JUN_GAS]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[JUN_GAS]" />
+                        <inputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].Columns[JUN_WATER]"
+                          cachedDataType="r8"
+                          cachedName="JUN_WATER"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[JUN_WATER]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[JUN_WATER]" />
+                        <inputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].Columns[JUN_DAYS]"
+                          cachedDataType="r8"
+                          cachedName="JUN_DAYS"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[JUN_DAYS]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[JUN_DAYS]" />
+                        <inputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].Columns[JUL_OIL]"
+                          cachedDataType="r8"
+                          cachedName="JUL_OIL"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[JUL_OIL]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[JUL_OIL]" />
+                        <inputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].Columns[JUL_GAS]"
+                          cachedDataType="r8"
+                          cachedName="JUL_GAS"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[JUL_GAS]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[JUL_GAS]" />
+                        <inputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].Columns[JUL_WATER]"
+                          cachedDataType="r8"
+                          cachedName="JUL_WATER"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[JUL_WATER]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[JUL_WATER]" />
+                        <inputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].Columns[JUL_DAYS]"
+                          cachedDataType="r8"
+                          cachedName="JUL_DAYS"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[JUL_DAYS]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[JUL_DAYS]" />
+                        <inputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].Columns[AUG_OIL]"
+                          cachedDataType="r8"
+                          cachedName="AUG_OIL"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[AUG_OIL]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[AUG_OIL]" />
+                        <inputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].Columns[AUG_GAS]"
+                          cachedDataType="r8"
+                          cachedName="AUG_GAS"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[AUG_GAS]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[AUG_GAS]" />
+                        <inputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].Columns[AUG_WATER]"
+                          cachedDataType="r8"
+                          cachedName="AUG_WATER"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[AUG_WATER]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[AUG_WATER]" />
+                        <inputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].Columns[AUG_DAYS]"
+                          cachedDataType="r8"
+                          cachedName="AUG_DAYS"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[AUG_DAYS]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[AUG_DAYS]" />
+                        <inputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].Columns[SEP_OIL]"
+                          cachedDataType="r8"
+                          cachedName="SEP_OIL"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[SEP_OIL]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[SEP_OIL]" />
+                        <inputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].Columns[SEP_GAS]"
+                          cachedDataType="r8"
+                          cachedName="SEP_GAS"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[SEP_GAS]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[SEP_GAS]" />
+                        <inputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].Columns[SEP_WATER]"
+                          cachedDataType="r8"
+                          cachedName="SEP_WATER"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[SEP_WATER]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[SEP_WATER]" />
+                        <inputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].Columns[SEP_DAYS]"
+                          cachedDataType="r8"
+                          cachedName="SEP_DAYS"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[SEP_DAYS]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[SEP_DAYS]" />
+                        <inputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].Columns[OCT_OIL]"
+                          cachedDataType="r8"
+                          cachedName="OCT_OIL"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[OCT_OIL]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[OCT_OIL]" />
+                        <inputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].Columns[OCT_GAS]"
+                          cachedDataType="r8"
+                          cachedName="OCT_GAS"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[OCT_GAS]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[OCT_GAS]" />
+                        <inputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].Columns[OCT_WATER]"
+                          cachedDataType="r8"
+                          cachedName="OCT_WATER"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[OCT_WATER]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[OCT_WATER]" />
+                        <inputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].Columns[OCT_DAYS]"
+                          cachedDataType="r8"
+                          cachedName="OCT_DAYS"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[OCT_DAYS]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[OCT_DAYS]" />
+                        <inputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].Columns[NOV_OIL]"
+                          cachedDataType="r8"
+                          cachedName="NOV_OIL"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[NOV_OIL]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[NOV_OIL]" />
+                        <inputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].Columns[NOV_GAS]"
+                          cachedDataType="r8"
+                          cachedName="NOV_GAS"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[NOV_GAS]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[NOV_GAS]" />
+                        <inputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].Columns[NOV_WATER]"
+                          cachedDataType="r8"
+                          cachedName="NOV_WATER"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[NOV_WATER]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[NOV_WATER]" />
+                        <inputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].Columns[NOV_DAYS]"
+                          cachedDataType="r8"
+                          cachedName="NOV_DAYS"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[NOV_DAYS]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[NOV_DAYS]" />
+                        <inputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].Columns[DEC_OIL]"
+                          cachedDataType="r8"
+                          cachedName="DEC_OIL"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[DEC_OIL]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[DEC_OIL]" />
+                        <inputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].Columns[DEC_GAS]"
+                          cachedDataType="r8"
+                          cachedName="DEC_GAS"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[DEC_GAS]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[DEC_GAS]" />
+                        <inputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].Columns[DEC_WATER]"
+                          cachedDataType="r8"
+                          cachedName="DEC_WATER"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[DEC_WATER]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[DEC_WATER]" />
+                        <inputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].Columns[DEC_DAYS]"
+                          cachedDataType="r8"
+                          cachedName="DEC_DAYS"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[DEC_DAYS]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[DEC_DAYS]" />
+                        <inputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].Columns[API_RES]"
+                          cachedDataType="r8"
+                          cachedName="API_RES"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[API_RES]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[API_RES]" />
+                        <inputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].Columns[ResCode]"
+                          cachedDataType="r8"
+                          cachedName="ResCode"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[ResCode]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[ResCode]" />
+                        <inputColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].Columns[Reservoir]"
+                          cachedDataType="wstr"
+                          cachedLength="255"
+                          cachedName="Reservoir"
+                          externalMetadataColumnId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[Reservoir]"
+                          lineageId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output].Columns[Reservoir]" />
+                      </inputColumns>
+                      <externalMetadataColumns
+                        isUsed="True">
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[APINO]"
+                          dataType="r8"
+                          name="APINO" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[COMPANY]"
+                          dataType="wstr"
+                          length="255"
+                          name="COMPANY" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[YR]"
+                          dataType="r8"
+                          name="YR" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[JAN_OIL]"
+                          dataType="r8"
+                          name="JAN_OIL" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[JAN_GAS]"
+                          dataType="r8"
+                          name="JAN_GAS" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[JAN_WATER]"
+                          dataType="r8"
+                          name="JAN_WATER" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[JAN_DAYS]"
+                          dataType="r8"
+                          name="JAN_DAYS" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[FEB_OIL]"
+                          dataType="r8"
+                          name="FEB_OIL" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[FEB_GAS]"
+                          dataType="r8"
+                          name="FEB_GAS" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[FEB_WATER]"
+                          dataType="r8"
+                          name="FEB_WATER" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[FEB_DAYS]"
+                          dataType="r8"
+                          name="FEB_DAYS" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[MAR_OIL]"
+                          dataType="r8"
+                          name="MAR_OIL" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[MAR_GAS]"
+                          dataType="r8"
+                          name="MAR_GAS" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[MAR_WATER]"
+                          dataType="r8"
+                          name="MAR_WATER" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[MAR_DAYS]"
+                          dataType="r8"
+                          name="MAR_DAYS" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[APR_OIL]"
+                          dataType="r8"
+                          name="APR_OIL" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[APR_GAS]"
+                          dataType="r8"
+                          name="APR_GAS" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[APR_WATER]"
+                          dataType="r8"
+                          name="APR_WATER" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[APR_DAYS]"
+                          dataType="r8"
+                          name="APR_DAYS" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[MAY_OIL]"
+                          dataType="r8"
+                          name="MAY_OIL" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[MAY_GAS]"
+                          dataType="r8"
+                          name="MAY_GAS" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[MAY_WATER]"
+                          dataType="r8"
+                          name="MAY_WATER" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[MAY_DAYS]"
+                          dataType="r8"
+                          name="MAY_DAYS" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[JUN_OIL]"
+                          dataType="r8"
+                          name="JUN_OIL" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[JUN_GAS]"
+                          dataType="r8"
+                          name="JUN_GAS" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[JUN_WATER]"
+                          dataType="r8"
+                          name="JUN_WATER" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[JUN_DAYS]"
+                          dataType="r8"
+                          name="JUN_DAYS" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[JUL_OIL]"
+                          dataType="r8"
+                          name="JUL_OIL" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[JUL_GAS]"
+                          dataType="r8"
+                          name="JUL_GAS" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[JUL_WATER]"
+                          dataType="r8"
+                          name="JUL_WATER" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[JUL_DAYS]"
+                          dataType="r8"
+                          name="JUL_DAYS" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[AUG_OIL]"
+                          dataType="r8"
+                          name="AUG_OIL" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[AUG_GAS]"
+                          dataType="r8"
+                          name="AUG_GAS" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[AUG_WATER]"
+                          dataType="r8"
+                          name="AUG_WATER" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[AUG_DAYS]"
+                          dataType="r8"
+                          name="AUG_DAYS" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[SEP_OIL]"
+                          dataType="r8"
+                          name="SEP_OIL" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[SEP_GAS]"
+                          dataType="r8"
+                          name="SEP_GAS" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[SEP_WATER]"
+                          dataType="r8"
+                          name="SEP_WATER" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[SEP_DAYS]"
+                          dataType="r8"
+                          name="SEP_DAYS" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[OCT_OIL]"
+                          dataType="r8"
+                          name="OCT_OIL" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[OCT_GAS]"
+                          dataType="r8"
+                          name="OCT_GAS" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[OCT_WATER]"
+                          dataType="r8"
+                          name="OCT_WATER" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[OCT_DAYS]"
+                          dataType="r8"
+                          name="OCT_DAYS" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[NOV_OIL]"
+                          dataType="r8"
+                          name="NOV_OIL" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[NOV_GAS]"
+                          dataType="r8"
+                          name="NOV_GAS" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[NOV_WATER]"
+                          dataType="r8"
+                          name="NOV_WATER" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[NOV_DAYS]"
+                          dataType="r8"
+                          name="NOV_DAYS" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[DEC_OIL]"
+                          dataType="r8"
+                          name="DEC_OIL" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[DEC_GAS]"
+                          dataType="r8"
+                          name="DEC_GAS" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[DEC_WATER]"
+                          dataType="r8"
+                          name="DEC_WATER" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[DEC_DAYS]"
+                          dataType="r8"
+                          name="DEC_DAYS" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[API_RES]"
+                          dataType="r8"
+                          name="API_RES" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[ResCode]"
+                          dataType="r8"
+                          name="ResCode" />
+                        <externalMetadataColumn
+                          refId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[Reservoir]"
+                          dataType="wstr"
+                          length="255"
+                          name="Reservoir" />
+                      </externalMetadataColumns>
+                    </input>
+                  </inputs>
+                </component>
+              </components>
+              <paths>
+                <path
+                  refId="Package\Foreach Excel File in Historical\Upload File.Paths[Excel Source Output]"
+                  endId="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination.Inputs[SQL Server Destination Input]"
+                  name="Excel Source Output"
+                  startId="Package\Foreach Excel File in Historical\Upload File\Excel Source.Outputs[Excel Source Output]" />
+              </paths>
+            </pipeline>
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+      <DTS:ForEachVariableMappings>
+        <DTS:ForEachVariableMapping
+          DTS:CreationName=""
+          DTS:DTSID="{F2177F89-61A2-4A70-9826-A4849676BD2A}"
+          DTS:ObjectName="{F2177F89-61A2-4A70-9826-A4849676BD2A}"
+          DTS:ValueIndex="0"
+          DTS:VariableName="User::FilePath" />
+      </DTS:ForEachVariableMappings>
+    </DTS:Executable>
+  </DTS:Executables>
+  <DTS:PrecedenceConstraints>
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint]"
+      DTS:CreationName=""
+      DTS:DTSID="{9645B0DD-FEF0-4460-8FA9-C8B510B7F436}"
+      DTS:From="Package\Delete all Data"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint"
+      DTS:To="Package\Foreach Excel File in Historical" />
+  </DTS:PrecedenceConstraints>
+  <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
+<!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
+<!--If you manually edit this section and make a mistake, you can delete it. -->
+<!--The package will still be able to load normally but the previous layout information will be lost and the designer will automatically re-arrange the elements on the design surface.-->
+<Objects
+  Version="8">
+  <!--Each node below will contain properties that do not affect runtime behavior.-->
+  <Package
+    design-time-name="Package">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="148,42"
+          Id="Package\Delete all Data"
+          TopLeft="50,76" />
+        <NodeLayout
+          Size="131,42"
+          Id="Package\Foreach Excel File in Historical\Upload File"
+          TopLeft="50,20" />
+        <ContainerLayout
+          HeaderHeight="43"
+          IsExpanded="True"
+          PanelSize="275,168"
+          Size="275,211"
+          Id="Package\Foreach Excel File in Historical"
+          TopLeft="293,25" />
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint]"
+          TopLeft="198,97">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="95,33.5"
+              Start="0,0"
+              End="87.5,33.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="43.5,0" />
+                  <mssgle:CubicBezierSegment
+                    Point1="43.5,0"
+                    Point2="47.5,0"
+                    Point3="47.5,4" />
+                  <mssgle:LineSegment
+                    End="47.5,29.5" />
+                  <mssgle:CubicBezierSegment
+                    Point1="47.5,29.5"
+                    Point2="47.5,33.5"
+                    Point3="51.5,33.5" />
+                  <mssgle:LineSegment
+                    End="87.5,33.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </Package>
+  <TaskHost
+    design-time-name="Package\Foreach Excel File in Historical\Upload File">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="188,42"
+          Id="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination"
+          TopLeft="49,116" />
+        <NodeLayout
+          Size="139,42"
+          Id="Package\Foreach Excel File in Historical\Upload File\Excel Source"
+          TopLeft="72,18" />
+        <EdgeLayout
+          Id="Package\Foreach Excel File in Historical\Upload File.Paths[Excel Source Output]"
+          TopLeft="142.25,60">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,56"
+              Start="0,0"
+              End="0,48.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,48.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\Foreach Excel File in Historical\Upload File\Excel Source">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\Foreach Excel File in Historical\Upload File\SQL Server Destination">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+</Objects>]]></DTS:DesignTimeProperties>
+</DTS:Executable>
